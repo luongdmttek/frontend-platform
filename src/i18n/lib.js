@@ -14,6 +14,7 @@ import ptLocale from 'react-intl/locale-data/pt';
 import ruLocale from 'react-intl/locale-data/ru';
 import thLocale from 'react-intl/locale-data/th';
 import ukLocale from 'react-intl/locale-data/uk';
+import viLocale from 'react-intl/locale-data/vi';
 import Cookies from 'universal-cookie';
 import merge from 'lodash.merge';
 
@@ -33,6 +34,7 @@ const supportedLocales = [
   'ru', // Russian
   'th', // Thai
   'uk', // Ukrainian
+  'vi', // Vietnamese
 ];
 const rtlLocales = [
   'ar', // Arabic
@@ -87,6 +89,7 @@ addLocaleData([
   ...ruLocale,
   ...thLocale,
   ...ukLocale,
+  ...viLocale,
 ]);
 
 /**
@@ -206,6 +209,7 @@ const messagesShape = {
   ru: PropTypes.objectOf(PropTypes.string), // Russian
   th: PropTypes.objectOf(PropTypes.string), // Thai
   uk: PropTypes.objectOf(PropTypes.string), // Ukrainian
+  vi: PropTypes.objectOf(PropTypes.string), // Vietnamese
 };
 
 const optionsShape = {
