@@ -79,8 +79,8 @@ class LanguageLoader {
       cookies.set(getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME, detectedLang, {
         maxAge: 120,
         path: '/',
-        domain: domainName,
-        // domain: '.local.openedx.io',
+        // domain: domainName,
+        domain: '.local.openedx.io',
         sameSite: 'lax'
       });
       console.log("domain: ", domainName);
