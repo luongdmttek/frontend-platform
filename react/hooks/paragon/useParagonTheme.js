@@ -1,9 +1,3 @@
-function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import { SELECTED_THEME_VARIANT_KEY } from '../../constants';
 import { logError } from '../../../logging';
@@ -29,19 +23,19 @@ import useParagonThemeVariants from './useParagonThemeVariants';
 * @returns {Object|undefined} The default theme variant, or `undefined` if no valid theme variant is found.
 *
 */
-export var getDefaultThemeVariant = function getDefaultThemeVariant(_ref) {
-  var _window$matchMedia, _window;
-  var themeVariants = _ref.themeVariants,
-    _ref$themeVariantDefa = _ref.themeVariantDefaults,
-    themeVariantDefaults = _ref$themeVariantDefa === void 0 ? {} : _ref$themeVariantDefa;
+export const getDefaultThemeVariant = _ref => {
+  let {
+    themeVariants,
+    themeVariantDefaults = {}
+  } = _ref;
   if (!themeVariants) {
     return undefined;
   }
-  var themeVariantKeys = Object.keys(themeVariants);
+  const themeVariantKeys = Object.keys(themeVariants);
 
   // If there is only one theme variant, return it since it's the only one that may be used.
   if (themeVariantKeys.length === 1) {
-    var themeVariantKey = themeVariantKeys[0];
+    const themeVariantKey = themeVariantKeys[0];
     return {
       name: themeVariantKey,
       metadata: themeVariants[themeVariantKey]
@@ -49,7 +43,7 @@ export var getDefaultThemeVariant = function getDefaultThemeVariant(_ref) {
   }
 
   // Prioritize persisted localStorage theme variant preference.
-  var persistedSelectedParagonThemeVariant = localStorage.getItem(SELECTED_THEME_VARIANT_KEY);
+  const persistedSelectedParagonThemeVariant = localStorage.getItem(SELECTED_THEME_VARIANT_KEY);
   if (persistedSelectedParagonThemeVariant && themeVariants[persistedSelectedParagonThemeVariant]) {
     return {
       name: persistedSelectedParagonThemeVariant,
@@ -59,17 +53,17 @@ export var getDefaultThemeVariant = function getDefaultThemeVariant(_ref) {
 
   // Then, detect system preference via `prefers-color-scheme` media query and use
   // the default dark theme variant, if one exists.
-  var hasDarkSystemPreference = !!((_window$matchMedia = (_window = window).matchMedia) !== null && _window$matchMedia !== void 0 && (_window$matchMedia = _window$matchMedia.call(_window, '(prefers-color-scheme: dark)')) !== null && _window$matchMedia !== void 0 && _window$matchMedia.matches);
-  var defaultDarkThemeVariant = themeVariantDefaults.dark;
-  var darkThemeVariantMetadata = themeVariants[defaultDarkThemeVariant];
+  const hasDarkSystemPreference = !!window.matchMedia?.('(prefers-color-scheme: dark)')?.matches;
+  const defaultDarkThemeVariant = themeVariantDefaults.dark;
+  const darkThemeVariantMetadata = themeVariants[defaultDarkThemeVariant];
   if (hasDarkSystemPreference && defaultDarkThemeVariant && darkThemeVariantMetadata) {
     return {
       name: defaultDarkThemeVariant,
       metadata: darkThemeVariantMetadata
     };
   }
-  var defaultLightThemeVariant = themeVariantDefaults.light;
-  var lightThemeVariantMetadata = themeVariants[defaultLightThemeVariant];
+  const defaultLightThemeVariant = themeVariantDefaults.light;
+  const lightThemeVariantMetadata = themeVariants[defaultLightThemeVariant];
 
   // Handle edge case where the default light theme variant is not configured or provided.
   if (!defaultLightThemeVariant || !lightThemeVariantMetadata) {
@@ -106,73 +100,64 @@ export var getDefaultThemeVariant = function getDefaultThemeVariant(_ref) {
  * // Dispatch an action to change the theme variant
  * dispatch(paragonThemeActions.setParagonThemeVariant('dark'));
  */
-var useParagonTheme = function useParagonTheme() {
-  var _getDefaultThemeVaria;
-  var paragonThemeUrls = useParagonThemeUrls();
-  var _ref2 = paragonThemeUrls || {},
-    themeCore = _ref2.core,
-    themeVariantDefaults = _ref2.defaults,
-    themeVariants = _ref2.variants;
-  var initialParagonThemeState = {
+const useParagonTheme = () => {
+  const paragonThemeUrls = useParagonThemeUrls();
+  const {
+    core: themeCore,
+    defaults: themeVariantDefaults,
+    variants: themeVariants
+  } = paragonThemeUrls || {};
+  const initialParagonThemeState = {
     isThemeLoaded: false,
-    themeVariant: (_getDefaultThemeVaria = getDefaultThemeVariant({
-      themeVariants: themeVariants,
-      themeVariantDefaults: themeVariantDefaults
-    })) === null || _getDefaultThemeVaria === void 0 ? void 0 : _getDefaultThemeVaria.name
+    themeVariant: getDefaultThemeVariant({
+      themeVariants,
+      themeVariantDefaults
+    })?.name
   };
-  var _useReducer = useReducer(paragonThemeReducer, initialParagonThemeState),
-    _useReducer2 = _slicedToArray(_useReducer, 2),
-    themeState = _useReducer2[0],
-    dispatch = _useReducer2[1];
-  var _useState = useState(false),
-    _useState2 = _slicedToArray(_useState, 2),
-    isCoreThemeLoaded = _useState2[0],
-    setIsCoreThemeLoaded = _useState2[1];
-  var onLoadThemeCore = useCallback(function () {
+  const [themeState, dispatch] = useReducer(paragonThemeReducer, initialParagonThemeState);
+  const [isCoreThemeLoaded, setIsCoreThemeLoaded] = useState(false);
+  const onLoadThemeCore = useCallback(() => {
     setIsCoreThemeLoaded(true);
   }, []);
-  var _useState3 = useState(false),
-    _useState4 = _slicedToArray(_useState3, 2),
-    hasLoadedThemeVariants = _useState4[0],
-    setHasLoadedThemeVariants = _useState4[1];
-  var onLoadThemeVariants = useCallback(function () {
+  const [hasLoadedThemeVariants, setHasLoadedThemeVariants] = useState(false);
+  const onLoadThemeVariants = useCallback(() => {
     setHasLoadedThemeVariants(true);
   }, []);
 
   // load the core theme CSS
   useParagonThemeCore({
-    themeCore: themeCore,
+    themeCore,
     onComplete: onLoadThemeCore
   });
 
   // respond to system preference changes with regard to `prefers-color-scheme: dark`.
-  var handleDarkModeSystemPreferenceChange = useCallback(function (prefersDarkMode) {
+  const handleDarkModeSystemPreferenceChange = useCallback(prefersDarkMode => {
     // Ignore system preference change if the theme variant is already set in localStorage.
     if (localStorage.getItem(SELECTED_THEME_VARIANT_KEY)) {
       return;
     }
-    if (prefersDarkMode && themeVariantDefaults !== null && themeVariantDefaults !== void 0 && themeVariantDefaults.dark) {
+    if (prefersDarkMode && themeVariantDefaults?.dark) {
       dispatch(paragonThemeActions.setParagonThemeVariant(themeVariantDefaults.dark));
-    } else if (!prefersDarkMode && themeVariantDefaults !== null && themeVariantDefaults !== void 0 && themeVariantDefaults.light) {
+    } else if (!prefersDarkMode && themeVariantDefaults?.light) {
       dispatch(paragonThemeActions.setParagonThemeVariant(themeVariantDefaults.light));
     } else {
-      logError("Could not set theme variant based on system preference (prefers dark mode: ".concat(prefersDarkMode, ")"), themeVariantDefaults, themeVariants);
+      logError(`Could not set theme variant based on system preference (prefers dark mode: ${prefersDarkMode})`, themeVariantDefaults, themeVariants);
     }
   }, [themeVariantDefaults, themeVariants]);
 
   // load the theme variant(s) CSS
   useParagonThemeVariants({
-    themeVariants: themeVariants,
+    themeVariants,
     onComplete: onLoadThemeVariants,
     currentThemeVariant: themeState.themeVariant,
     onDarkModeSystemPreferenceChange: handleDarkModeSystemPreferenceChange
   });
-  useEffect(function () {
+  useEffect(() => {
     // theme is already loaded, do nothing
     if (themeState.isThemeLoaded) {
       return;
     }
-    var hasThemeConfig = (themeCore === null || themeCore === void 0 ? void 0 : themeCore.urls) && !isEmptyObject(themeVariants);
+    const hasThemeConfig = themeCore?.urls && !isEmptyObject(themeVariants);
     if (!hasThemeConfig) {
       // no theme URLs to load, set loading to false.
       dispatch(paragonThemeActions.setParagonThemeLoaded(true));
@@ -185,7 +170,7 @@ var useParagonTheme = function useParagonTheme() {
 
     // All application theme URLs are loaded
     dispatch(paragonThemeActions.setParagonThemeLoaded(true));
-  }, [themeState.isThemeLoaded, isCoreThemeLoaded, hasLoadedThemeVariants, themeCore === null || themeCore === void 0 ? void 0 : themeCore.urls, themeVariants]);
+  }, [themeState.isThemeLoaded, isCoreThemeLoaded, hasLoadedThemeVariants, themeCore?.urls, themeVariants]);
   return [themeState, dispatch];
 };
 export default useParagonTheme;

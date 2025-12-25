@@ -4,8 +4,8 @@ import { basename } from '../../../initialize';
  * Iterates through each given `<link>` element and removes it from the DOM.
  * @param {HTMLLinkElement[]} existingLinks
  */
-export var removeExistingLinks = function removeExistingLinks(existingLinks) {
-  existingLinks.forEach(function (link) {
+export const removeExistingLinks = existingLinks => {
+  existingLinks.forEach(link => {
     link.remove();
   });
 };
@@ -15,16 +15,13 @@ export var removeExistingLinks = function removeExistingLinks(existingLinks) {
 * @param {string} url The theme file path.
 * @returns {string} The default theme url.
 */
-export var fallbackThemeUrl = function fallbackThemeUrl(url) {
-  var _window$location;
-  var baseUrl = (_window$location = window.location) === null || _window$location === void 0 ? void 0 : _window$location.origin;
+export const fallbackThemeUrl = url => {
+  const baseUrl = window.location?.origin;
 
   // validates if the baseurl has the protocol to be interpreted correctly by the browser,
   // if is not present add '//' to use Protocol-relative URL
-  var protocol = /^(https?:)?\/\//.test(baseUrl) ? '' : '//';
-  return "".concat(protocol).concat(baseUrl).concat(basename).concat(url);
+  const protocol = /^(https?:)?\/\//.test(baseUrl) ? '' : '//';
+  return `${protocol}${baseUrl}${basename}${url}`;
 };
-export var isEmptyObject = function isEmptyObject(obj) {
-  return !obj || Object.keys(obj).length === 0;
-};
+export const isEmptyObject = obj => !obj || Object.keys(obj).length === 0;
 //# sourceMappingURL=utils.js.map
