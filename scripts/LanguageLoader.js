@@ -1,5 +1,6 @@
 import { isUndefined } from 'lodash';
 import Cookies from 'universal-cookie';
+import { getConfig } from '../config';
 
 /**
  * @implements {LanguageLoader}
@@ -26,6 +27,7 @@ class LanguageLoader {
     const mfeLang = cookies.get("openedx-language-preference");
     // const detectedLang = html.getAttribute('lang');
     html.setAttribute("lang", isUndefined(mfeLang) ? "vi" : mfeLang);
+    console.log("lang: ", getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME);
 
     // Function to check if the page is currently translated
     function isPageTranslated() {
@@ -67,7 +69,13 @@ class LanguageLoader {
       } else {
         // Actions to take when original language is restored
       }
-      cookies.set("openedx-language-preference", detectedLang);
+      // cookies.set("openedx-language-preference", detectedLang);
+      cookies.set("openedx-language-preference", detectedLang, {
+        maxAge: 300,
+        path: '/',
+        domain: '.local.openedx.io',
+        sameSite: 'lax'
+      });
       window.location.reload();
     }
   }
