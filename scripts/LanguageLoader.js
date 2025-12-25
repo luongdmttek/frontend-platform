@@ -24,10 +24,16 @@ class LanguageLoader {
     // }
     const cookies = new Cookies();
     const html = document.documentElement;
-    const mfeLang = cookies.get("openedx-language-preference");
+
+    // const mfeLang = cookies.get("openedx-language-preference");
+    const mfeLang = cookies.get(getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME);
+
     // const detectedLang = html.getAttribute('lang');
     html.setAttribute("lang", isUndefined(mfeLang) ? "vi" : mfeLang);
-    console.log("lang: ", getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME);
+    // console.log("lang: ", getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME)
+
+    // const domainName = getConfig().LMS_BASE_URL.replace('http://', '');
+    const domainName = window.location.hostname;
 
     // Function to check if the page is currently translated
     function isPageTranslated() {
@@ -70,13 +76,16 @@ class LanguageLoader {
         // Actions to take when original language is restored
       }
       // cookies.set("openedx-language-preference", detectedLang);
-      cookies.set("openedx-language-preference", detectedLang, {
-        maxAge: 300,
+      cookies.set(getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME, detectedLang, {
+        maxAge: 120,
         path: '/',
-        domain: '.local.openedx.io',
+        domain: domainName,
+        // domain: '.local.openedx.io',
         sameSite: 'lax'
       });
-      window.location.reload();
+      console.log("domain: ", domainName);
+
+      // window.location.reload();
     }
   }
 }
