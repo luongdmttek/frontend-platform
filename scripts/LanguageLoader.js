@@ -91,9 +91,9 @@ var LanguageLoader = /*#__PURE__*/function () {
           // domain: '.local.openedx.io',
           sameSite: 'lax'
         });
-        console.log("domain: ", baseUrl);
+        // console.log("domain: ", baseUrl);
 
-        // window.location.reload();
+        window.location.reload();
       }
     }
   }]);
