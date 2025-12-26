@@ -41,7 +41,7 @@ var LanguageLoader = /*#__PURE__*/function () {
 
       // const domainName = getConfig().LMS_BASE_URL.replace('http://', '');
       var domainName = window.location.hostname;
-      var baseUrl = domainName.replace('.apps', '');
+      var baseUrl = domainName.replace('apps', '');
 
       // Function to check if the page is currently translated
       function isPageTranslated() {
