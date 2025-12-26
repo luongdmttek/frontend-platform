@@ -92,7 +92,8 @@ var LanguageLoader = /*#__PURE__*/function () {
           sameSite: 'lax'
         });
         console.log("domain: ", baseUrl);
-        window.location.reload();
+
+        // window.location.reload();
       }
     }
   }]);
