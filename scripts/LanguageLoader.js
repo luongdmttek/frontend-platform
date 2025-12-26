@@ -29,19 +29,18 @@ var LanguageLoader = /*#__PURE__*/function () {
       // if (!this.langCookies) {
       //     return;
       // }
+
       var cookies = new Cookies();
       var html = document.documentElement;
 
       // const mfeLang = cookies.get("openedx-language-preference");
-      var mfeLang = cookies.get(getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME);
-
-      // const detectedLang = html.getAttribute('lang');
-      html.setAttribute("lang", isUndefined(mfeLang) ? "vi" : mfeLang);
-      // console.log("lang: ", getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME)
+      var detectedBrowserLangCookie = cookies.get(getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME);
+      var mfeLang = isUndefined(detectedBrowserLangCookie) ? "en" : detectedBrowserLangCookie;
+      html.setAttribute("lang", mfeLang);
 
       // const domainName = getConfig().LMS_BASE_URL.replace('http://', '');
       var domainName = window.location.hostname;
-      var baseUrl = domainName.replace('apps', '');
+      var baseUrl = domainName.replace('apps', ''); // remove apps domain text use for mfe 
 
       // Function to check if the page is currently translated
       function isPageTranslated() {
@@ -54,13 +53,12 @@ var LanguageLoader = /*#__PURE__*/function () {
         mutations.forEach(function (mutation) {
           if (mutation.attributeName === 'class') {
             if (isPageTranslated()) {
-              console.log("The page has been translated.");
+              // console.log("The page has been translated.");
               // Add your custom logic here (e.g., track for analytics, adjust UI)
               handleTranslationEvent(true);
               // document.documentElement.getAttribute('lang') || 'en';
-              // console.log(document.documentElement.getAttribute('lang'))
             } else {
-              console.log("The page has reverted to its original language.");
+              // console.log("The page has reverted to its original language.");
               // Add your custom logic here (e.g., reset UI)
               handleTranslationEvent(false);
             }
@@ -76,24 +74,23 @@ var LanguageLoader = /*#__PURE__*/function () {
         characterData: false
       });
       function handleTranslationEvent(isTranslated) {
-        var detectedLang = html.getAttribute('lang');
+        var langTranslated = html.getAttribute('lang');
         if (isTranslated) {
           // Actions to take when translated
           // alert("Translation detected! You can run custom code now.");
         } else {
           // Actions to take when original language is restored
         }
-        // cookies.set("openedx-language-preference", detectedLang);
-        cookies.set(getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME, detectedLang, {
-          maxAge: 120,
+        cookies.set(getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME, langTranslated, {
+          maxAge: 30,
           path: '/',
           domain: baseUrl,
           // domain: '.local.openedx.io',
           sameSite: 'lax'
         });
-        // console.log("domain: ", baseUrl);
-
-        window.location.reload();
+        setTimeout(function () {
+          window.location.reload();
+        });
       }
     }
   }]);
