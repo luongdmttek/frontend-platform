@@ -34,6 +34,7 @@ class LanguageLoader {
 
     // const domainName = getConfig().LMS_BASE_URL.replace('http://', '');
     const domainName = window.location.hostname;
+    const baseUrl = domainName.replace('apps', '.');
 
     // Function to check if the page is currently translated
     function isPageTranslated() {
@@ -79,13 +80,13 @@ class LanguageLoader {
       cookies.set(getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME, detectedLang, {
         maxAge: 120,
         path: '/',
-        // domain: domainName,
-        domain: '.local.openedx.io',
+        domain: baseUrl,
+        // domain: '.local.openedx.io',
         sameSite: 'lax'
       });
-      console.log("domain: ", domainName);
+      // console.log("domain: ", baseUrl);
 
-      // window.location.reload();
+      window.location.reload();
     }
   }
 }
