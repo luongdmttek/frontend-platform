@@ -88,9 +88,11 @@ var LanguageLoader = /*#__PURE__*/function () {
           // domain: '.local.openedx.io',
           sameSite: 'lax'
         });
-        setTimeout(function () {
-          window.location.reload();
-        });
+        console.log("domain: ", baseUrl);
+
+        // setTimeout(() => {
+        //     window.location.reload();
+        // })
       }
     }
   }]);
