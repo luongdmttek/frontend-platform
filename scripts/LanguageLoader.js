@@ -82,15 +82,16 @@ var LanguageLoader = /*#__PURE__*/function () {
           // Actions to take when original language is restored
         }
         cookies.set(getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME, langTranslated, {
-          maxAge: 30,
+          // maxAge: 30,
           path: '/',
           domain: baseUrl,
           // domain: '.local.openedx.io',
           sameSite: 'lax'
         });
-        setTimeout(function () {
-          window.location.reload();
-        });
+
+        // setTimeout(() => {
+        //     window.location.reload();
+        // })
       }
     }
   }]);
