@@ -12,20 +12,20 @@ import { getConfig } from '../config';
  * @implements {LanguageLoader}
  */
 var LanguageLoader = /*#__PURE__*/function () {
-  function LanguageLoader(_ref) {
-    var config = _ref.config,
-      onTranslateChange = _ref.onTranslateChange,
-      isTranslated = _ref.isTranslated,
-      originalLang = _ref.originalLang;
+  function LanguageLoader() {
     _classCallCheck(this, LanguageLoader);
-    this.langCookies = config.LANGUAGE_PREFERENCE_COOKIE_NAME;
-    // this.onTranslateChange = onTranslateChange;
-    // isTranslated = false;
-    // this.originalLang = document.documentElement.getAttribute('lang') || 'en';
   }
   return _createClass(LanguageLoader, [{
     key: "loadScript",
-    value: function loadScript() {
+    value:
+    // constructor({ config, onTranslateChange, isTranslated, originalLang }) {
+    //     // this.langCookies = config.LANGUAGE_PREFERENCE_COOKIE_NAME;
+    //     // this.onTranslateChange = onTranslateChange;
+    //     // isTranslated = false;
+    //     // this.originalLang = document.documentElement.getAttribute('lang') || 'en';
+    // }
+
+    function loadScript() {
       // if (!this.langCookies) {
       //     return;
       // }
@@ -81,17 +81,18 @@ var LanguageLoader = /*#__PURE__*/function () {
         } else {
           // Actions to take when original language is restored
         }
+        var changeLanguageTimestamp = new Date().getTime();
+        var cookieExpiry = new Date(changeLanguageTimestamp + 30 * 864e5);
         cookies.set(getConfig().LANGUAGE_PREFERENCE_COOKIE_NAME, langTranslated, {
-          // maxAge: 30,
+          maxAge: cookieExpiry,
           path: '/',
           domain: baseUrl,
           // domain: '.local.openedx.io',
           sameSite: 'lax'
         });
-
-        // setTimeout(() => {
-        //     window.location.reload();
-        // })
+        setTimeout(function () {
+          window.location.reload();
+        });
       }
     }
   }]);
